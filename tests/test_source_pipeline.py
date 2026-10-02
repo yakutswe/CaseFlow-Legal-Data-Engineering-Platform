@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 import pytest
 
 from app.db.session import SessionLocal
@@ -21,7 +23,7 @@ def test_suspicious_low_record_count():
         ):
             ingest_source(
                 db=db,
-                source=BrokenSource(),
+                source=cast(Any, BrokenSource()),
                 min_expected_records=10,
             )
     finally:
