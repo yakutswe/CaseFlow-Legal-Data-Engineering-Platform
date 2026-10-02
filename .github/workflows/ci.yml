@@ -1,11 +1,14 @@
+
 name: CaseFlow CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
@@ -62,22 +65,19 @@ jobs:
 
           db = SessionLocal()
 
-          court = db.get(Court, 1)
-
-          if court is None:
-              court = Court(
-                  id=1,
-                  name="Supreme Court of the United States",
-                  abbreviation="SCOTUS",
-                  jurisdiction="US",
-                  level="supreme",
+          if db.get(Court, 1) is None:
+              db.add(
+                  Court(
+                      id=1,
+                      name="Supreme Court of the United States",
+                      abbreviation="SCOTUS",
+                      jurisdiction="US",
+                      level="supreme",
+                  )
               )
-              db.add(court)
               db.commit()
 
-          case = db.get(Case, 36)
-
-          if case is None:
+          if db.get(Case, 36) is None:
               opinion = (
                   "This test opinion discusses standing "
                   "and Article III standing."
@@ -87,19 +87,19 @@ jobs:
                   opinion.encode("utf-8")
               ).hexdigest()
 
-              case = Case(
-                  id=36,
-                  external_id="ci-case-36",
-                  case_name="Allen v. Milligan",
-                  court_id=1,
-                  decision_date=None,
-                  docket_number="CI-36",
-                  opinion_text=opinion,
-                  source_url="https://example.com/ci-case-36",
-                  content_hash=case_hash,
+              db.add(
+                  Case(
+                      id=36,
+                      external_id="ci-case-36",
+                      case_name="Allen v. Milligan",
+                      court_id=1,
+                      decision_date=None,
+                      docket_number="CI-36",
+                      opinion_text=opinion,
+                      source_url="https://example.com/ci-case-36",
+                      content_hash=case_hash,
+                  )
               )
-
-              db.add(case)
               db.commit()
 
           db.close()
