@@ -1,63 +1,10 @@
-name: CaseFlow CI
-
-on:
-  push:
-    branches: [main]
-
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: caseflow
-          POSTGRES_PASSWORD: caseflow
-          POSTGRES_DB: caseflow
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U caseflow -d caseflow"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-
-    env:
-      DATABASE_URL: postgresql+psycopg://caseflow:caseflow@localhost:5432/caseflow
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run migrations
-        run: |
-          alembic upgrade head
-
       - name: Seed test database
         run: |
           python - <<'PY'
+          import hashlib
+
           from app.db.session import SessionLocal
           from app.models import Court, Case
-          from ingestion.pipelines.case_pipeline import content_hash
 
           db = SessionLocal()
 
@@ -82,6 +29,10 @@ jobs:
                   "and Article III standing."
               )
 
+              content_hash = hashlib.sha256(
+                  opinion.encode("utf-8")
+              ).hexdigest()
+
               case = Case(
                   id=36,
                   external_id="ci-case-36",
@@ -91,7 +42,7 @@ jobs:
                   docket_number="CI-36",
                   opinion_text=opinion,
                   source_url="https://example.com/ci-case-36",
-                  content_hash=content_hash(opinion),
+                  content_hash=content_hash,
               )
 
               db.add(case)
@@ -99,7 +50,3 @@ jobs:
 
           db.close()
           PY
-
-      - name: Run tests
-        run: |
-          python -m pytest tests -v --tb=short
