@@ -3,18 +3,14 @@ services:
     image: postgres:17
     container_name: caseflow_db
     restart: unless-stopped
-
     environment:
       POSTGRES_USER: caseflow
       POSTGRES_PASSWORD: caseflow
       POSTGRES_DB: caseflow
-
     ports:
       - "5433:5432"
-
     volumes:
       - caseflow_postgres_data:/var/lib/postgresql/data
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U caseflow -d caseflow"]
       interval: 5s
@@ -25,19 +21,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     container_name: caseflow_api
     restart: unless-stopped
-
     environment:
       DATABASE_URL: postgresql+psycopg://caseflow:caseflow@db:5432/caseflow
-
     ports:
       - "8000:8000"
-
     depends_on:
       db:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend/caseflow-dashboard
+      dockerfile: Dockerfile
+    container_name: caseflow_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
 
 volumes:
   caseflow_postgres_data:
