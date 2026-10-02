@@ -1,15 +1,18 @@
-services:
-  db:
-    image: postgres:17
-    container_name: caseflow-db
-    environment:
-      POSTGRES_USER: caseflow
-      POSTGRES_PASSWORD: caseflow
-      POSTGRES_DB: caseflow
-    ports:
-      - "5432:5432"
-    volumes:
-      - caseflow-postgres-data:/var/lib/postgresql/data
+  services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
 
-volumes:
-  caseflow-postgres-data:
+    container_name: caseflow_api
+    restart: unless-stopped
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://caseflow:caseflow@db:5432/caseflow
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      db:
+        condition: service_healthy
