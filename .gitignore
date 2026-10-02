@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+frontend/caseflow-dashboard/node_modules/
+frontend/caseflow-dashboard/dist/
+frontend/caseflow-dashboard/tsconfig.tsbuildinfo
