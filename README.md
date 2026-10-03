@@ -39,7 +39,6 @@ FastAPI REST API
         |
         v
 Nginx + React dashboard
-
 ## Demo
 
 ### CaseFlow Dashboard
