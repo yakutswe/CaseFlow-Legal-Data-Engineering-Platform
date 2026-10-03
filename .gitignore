@@ -5,3 +5,4 @@ frontend/caseflow-dashboard/node_modules/
 frontend/caseflow-dashboard/dist/
 frontend/caseflow-dashboard/tsconfig.tsbuildinfo
 .env
+.env
