@@ -39,3 +39,17 @@ FastAPI REST API
         |
         v
 Nginx + React dashboard
+
+## Demo
+
+### CaseFlow Dashboard
+
+CaseFlow provides ranked full-text search across legal opinions, citation intelligence, system-health visibility, and an end-to-end view of the ingestion pipeline.
+
+![CaseFlow Dashboard](docs/images/caseflow-dashboard.png)
+
+### FastAPI API
+
+The backend exposes case, citation, search, court, and health endpoints through FastAPI with interactive OpenAPI documentation.
+
+![CaseFlow API Documentation](docs/images/caseflow-api-docs.png)
