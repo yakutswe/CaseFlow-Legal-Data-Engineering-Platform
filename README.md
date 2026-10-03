@@ -1,56 +1,103 @@
-# CaseFlow — Legal Data Engineering Platform
+# CaseFlow
 
-CaseFlow is an end-to-end legal data engineering platform for ingesting court opinions, validating and normalizing case data, extracting citation relationships, indexing opinion text for search, and exposing the results through a FastAPI API and React dashboard.
+### Legal Data Engineering & Search Platform
 
-## Highlights
+CaseFlow is a production-style legal data platform for ingesting, normalizing, searching, and retrieving court case data with traceable citations.
 
-- Resilient Supreme Court opinion ingestion with bounded concurrency, retry logic, and per-document failure isolation
-- PostgreSQL-backed case, court, ingestion-job, and citation models
-- Idempotent ingestion with content hashing, duplicate detection, and update handling
-- Citation extraction and case relationship APIs
-- PostgreSQL full-text search using `tsvector`, `tsquery`, ranking, snippets, and a GIN index
-- FastAPI REST API with Swagger documentation
-- React + TypeScript dashboard served through Nginx
-- Docker Compose development stack
-- Alembic database migrations
-- Pytest coverage for ingestion, citation parsing, API health, search, and source reliability
-- GitHub Actions CI
+It is designed to demonstrate how structured legal data can be transformed into a reliable search and research workflow using modern backend, database, API, and frontend technologies.
+
+---
+
+## Overview
+
+CaseFlow combines:
+
+- legal data ingestion
+- structured normalization
+- PostgreSQL-backed search
+- citation-aware retrieval
+- REST APIs
+- React dashboard
+- Dockerized local development
+- automated testing
+- CI workflows
+
+The goal is not only to search legal records, but to make the underlying data easier to trust, inspect, and use.
+
+---
+
+## Product Problem
+
+Legal researchers and analysts often work across fragmented sources, inconsistent case metadata, and difficult-to-trace search results.
+
+CaseFlow is designed around three core needs:
+
+1. **Reliable ingestion**
+2. **Structured search**
+3. **Traceable results**
+
+---
+
+## Target Users
+
+### Primary Users
+- Legal researchers
+- Legal operations teams
+- Attorneys
+- Legal-tech product teams
+
+### Secondary Users
+- Data engineers
+- AI/LLM teams building retrieval systems
+- Compliance and research teams
+
+---
+
+## Product Goals
+
+- Normalize inconsistent case data
+- Make court and case metadata searchable
+- Preserve source traceability
+- Support future citation-aware AI workflows
+- Provide a clean API for downstream applications
+- Reduce manual research effort
+
+---
 
 ## Architecture
 
 ```text
-Supreme Court source
+External Legal Data
         |
         v
-Concurrent fetch + PDF parsing
+Ingestion Pipeline
         |
         v
-Normalize / validate / hash / deduplicate
+Validation + Normalization
         |
         v
 PostgreSQL
-  |            |
-  |            +--> Citation extraction
-  |
-  +--> Full-text GIN index
         |
-        v
-FastAPI REST API
-        |
-        v
-Nginx + React dashboard
-```
+        +------------------+
+        |                  |
+        v                  v
+Search API          Citation API
+        |                  |
+        +--------+---------+
+                 |
+                 v
+          FastAPI Backend
+                 |
+                 v
+          React Dashboard
+---
 
 ## Demo
 
-### CaseFlow Dashboard
-
-CaseFlow provides ranked full-text search across legal opinions, citation intelligence, system-health visibility, and an end-to-end view of the ingestion pipeline.
+### Dashboard
 
 ![CaseFlow Dashboard](docs/images/caseflow-dashboard.png)
 
-### FastAPI API
-
-The backend exposes case, citation, search, court, and health endpoints through FastAPI with interactive OpenAPI documentation.
+### API Documentation
 
 ![CaseFlow API Documentation](docs/images/caseflow-api-docs.png)
