@@ -1,8 +1,7 @@
 __pycache__/
 *.pyc
-
-frontend/caseflow-dashboard/node_modules/
-frontend/caseflow-dashboard/dist/
-frontend/caseflow-dashboard/tsconfig.tsbuildinfo
+.pytest_cache/
+.venv/
 .env
-.env
+frontend/**/node_modules/
+frontend/**/dist/
