@@ -4,4 +4,4 @@ __pycache__/
 .venv/
 .env
 frontend/**/node_modules/
-frontend/**/dist/
+frontend/**/dist/frontend/caseflow-dashboard/tsconfig.tsbuildinfo
